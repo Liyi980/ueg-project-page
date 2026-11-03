@@ -1,0 +1,22 @@
+# 只发布网页用到的文件，排除未引用的视频、中间产物和备份
+# 更新素材后重新部署前，可运行: python scripts/build_manifest.py
+
+# 备份目录（原始 mp4v 编码视频）
+assest/videos/_original_mp4v_backup/
+
+# 未被网页引用的视频
+assest/videos/mask/*/camus_condition_mask_overlay.mp4
+assest/videos/traj/*/*_target_trajectory_overlay.mp4
+assest/videos/traj/*/*_overlay_predicted_trajectory.mp4
+assest/videos/ef/*/*/best_ef_z0_*.mp4
+
+# 训练/评估中间产物
+assest/videos/**/*.json
+assest/videos/**/*.jsonl
+
+# 论文源 PDF（已转成 teaser.png）
+assest/figures/*.pdf
+
+# 系统文件
+Thumbs.db
+.DS_Store

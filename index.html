@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UEG: Unified Sampling-time Guidance for Controllable Echocardiography Video Generation</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --muted: #6b7280;
+    --accent: #b91c1c;
+    --border: #e5e7eb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.7;
+  }
+  .container { max-width: 1380px; margin: 0 auto; padding: 0 24px; }
+
+  header { padding: 64px 0 36px; text-align: center; }
+  header h1 { font-size: 1.9rem; font-weight: 700; margin-bottom: 24px; line-height: 1.4; }
+  .btn-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 20px; border-radius: 8px; text-decoration: none;
+    font-size: 0.92rem; font-weight: 500; border: 1px solid var(--border);
+    background: var(--card); color: var(--text); transition: all .15s;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  section { padding: 36px 0; }
+  h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 14px; }
+  h2 .tag {
+    display: inline-block; font-size: 0.72rem; font-weight: 600; color: #fff;
+    background: var(--accent); border-radius: 6px; padding: 2px 10px;
+    vertical-align: 3px; margin-right: 10px; letter-spacing: .5px;
+  }
+  .desc { font-size: 0.95rem; color: #374151; margin-bottom: 18px; }
+  .desc .count { color: var(--accent); font-weight: 600; }
+
+  .teaser {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden;
+  }
+  .teaser img, .teaser video { width: 100%; display: block; }
+  .caption { font-size: 0.85rem; color: var(--muted); padding: 12px 16px; border-top: 1px solid var(--border); }
+
+  /* ---- 视频网格：一排 6 个 ---- */
+  .video-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+  .vcell {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    overflow: hidden; cursor: pointer; transition: box-shadow .15s;
+  }
+  .vcell:hover { box-shadow: 0 6px 20px rgba(0,0,0,.09); }
+  .vcell video { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: #000; }
+  .vcell .label {
+    text-align: center; font-size: 0.72rem; padding: 6px 4px; color: var(--muted);
+    border-top: 1px solid var(--border); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .vcell.ours .label { color: var(--accent); font-weight: 600; }
+
+  /* ---- Lightbox ---- */
+  .lightbox {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.87);
+    z-index: 100; align-items: center; justify-content: center; flex-direction: column;
+  }
+  .lightbox.active { display: flex; }
+  .lightbox video { max-width: 82vw; max-height: 74vh; background: #000; border-radius: 8px; }
+  .lightbox .lb-caption { color: #fff; margin-top: 14px; font-size: 0.95rem; }
+  .lightbox .lb-close { position: absolute; top: 18px; right: 30px; color: #fff; font-size: 2rem; cursor: pointer; line-height: 1; }
+
+  .citation {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 18px 20px; font-family: Consolas, "Courier New", monospace;
+    font-size: 0.82rem; white-space: pre-wrap; overflow-x: auto;
+  }
+  footer { text-align: center; padding: 44px 0 40px; color: var(--muted); font-size: 0.85rem; }
+
+  @media (max-width: 1100px) { .video-grid { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 720px)  { .video-grid { grid-template-columns: repeat(2, 1fr); } header h1 { font-size: 1.4rem; } }
+</style>
+</head>
+<body>
+
+<header class="container">
+  <h1>UEG: Unified Sampling-time Guidance for Controllable Echocardiography Video Generation with Heterogeneous Medical Condition</h1>
+  <div class="btn-row">
+    <a class="btn" href="#">📄 Paper (arXiv)</a>
+    <a class="btn" href="#">💻 Github</a>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- Abstract -->
+  <section>
+    <h2>Abstract</h2>
+    <p class="desc">
+      Controllable echocardiography video generation must accommodate heterogeneous conditions describing cardiac
+      structure, motion, and function. We present <b>Unified Echo Guidance (UEG)</b>, a sampling-time framework that
+      reuses a single frozen unconditional video diffusion prior to control myocardial masks, trajectories, and
+      ejection fraction (EF), without paired condition–video training or task-specific generator fine-tuning.
+      UEG formulates task-specific consistency objectives using frozen differentiable measurement networks applied
+      to the predicted clean video, and steers sampling through their gradients. For trajectory control, UEG
+      introduces Anatomy–Motion Decomposed Guidance (AMD). Experiments demonstrate improved condition adherence
+      across all three tasks.
+    </p>
+  </section>
+
+  <!-- Teaser / Pipeline -->
+  <section>
+    <h2>Method Overview</h2>
+    <div class="teaser">
+      <img src="assest/figures/teaser.png" alt="Teaser"
+           onerror="this.replaceWith(Object.assign(document.createElement('div'),{style:'padding:60px;text-align:center;color:#9ca3af',textContent:'Missing: assest/figures/teaser.png'}))">
+      <div class="caption">Figure 1: UEG uses myocardial mask sequences, point trajectories, or target EF to guide a frozen video diffusion prior toward condition-consistent videos.</div>
+    </div>
+  </section>
+
+  <!-- ============ Task 1: Mask ============ -->
+  <section>
+    <h2><span class="tag">Task 1</span>Structure-Conditioned Generation (Myocardial Masks)</h2>
+    <p class="desc">
+      For each case, the generated video is shown on the left and the predicted myocardium masks overlaid on the
+      condition masks on the right. Red: target mask, Green: prediction, Yellow: overlap.
+      <span class="count" id="maskCount"></span> Click any video to enlarge.
+    </p>
+    <div class="video-grid" id="maskGrid"></div>
+  </section>
+
+  <!-- ============ Task 2: Trajectory ============ -->
+  <section>
+    <h2><span class="tag">Task 2</span>Motion-Conditioned Generation (Point Trajectories)</h2>
+    <p class="desc">
+      For each case, the generated video is shown on the left and the predicted point trajectories overlaid on the
+      target trajectories on the right. Orange: target trajectories, Yellow: predicted trajectories.
+      <span class="count" id="trajCount"></span>
+    </p>
+    <div class="video-grid" id="trajGrid"></div>
+  </section>
+
+  <!-- ============ Task 3: EF ============ -->
+  <section>
+    <h2><span class="tag">Task 3</span>Function-Conditioned Generation (Ejection Fraction)</h2>
+    <p class="desc">
+      Given a target EF value, UEG generates videos whose cardiac function matches the target.
+      The target EF value is noted below each generated video.
+      <span class="count" id="efCount"></span>
+    </p>
+    <div class="video-grid" id="efGrid"></div>
+  </section>
+
+  <!-- Citation -->
+  <section>
+    <h2>Citation</h2>
+    <div class="citation">@inproceedings{ueg2027,
+  title     = {UEG: Unified Sampling-time Guidance for Controllable Echocardiography Video Generation with Heterogeneous Medical Condition},
+  author    = {Anonymous},
+  booktitle = {CVPR},
+  year      = {2027}
+}</div>
+  </section>
+
+</main>
+
+<footer>Static project page · hosted on GitHub Pages</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <span class="lb-close" onclick="closeLightbox()">✕</span>
+  <video id="lbVideo" controls autoplay loop muted playsinline></video>
+  <div class="lb-caption" id="lbCaption"></div>
+</div>
+
+<!-- 自适应清单：由 scripts/build_manifest.py 扫描 assest/videos/ 生成 -->
+<script src="assest/manifest.js"></script>
+<script>
+/* ==========================================================
+   渲染逻辑：case 数量与路径完全由 assest/manifest.js 决定，
+   新增/删除 case 后运行 python scripts/build_manifest.py 即可。
+   ========================================================== */
+
+const M = window.MANIFEST || { mask: [], traj: [], ef: [] };
+
+function makeVideo(src) {
+  const v = document.createElement("video");
+  v.src = src;
+  v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
+  v.preload = "metadata"; // 先加载首帧，进入视口再播放，省流量
+  v.onerror = () => {
+    const d = document.createElement("div");
+    d.style.cssText = "width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;color:#9ca3af;background:#f3f4f6;font-size:.72rem;padding:8px;text-align:center";
+    d.textContent = "Missing: " + src.split("/").pop();
+    v.replaceWith(d);
+  };
+  // 进入视口才播放（一排 6 个视频同屏时不卡）
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { e.isIntersecting ? v.play().catch(()=>{}) : v.pause(); });
+  }, { threshold: 0.25 });
+  io.observe(v);
+  return v;
+}
+
+function makeCell(src, label, role) {
+  const cell = document.createElement("div");
+  cell.className = "vcell" + (role === "ours" ? " ours" : "");
+  cell.appendChild(makeVideo(src));
+  const lab = document.createElement("div");
+  lab.className = "label";
+  lab.textContent = label;
+  cell.appendChild(lab);
+  cell.onclick = () => openLightbox(src, label);
+  return cell;
+}
+
+// Task 1 · Mask：生成 | 条件叠加 成对
+M.mask.forEach(c => {
+  document.getElementById("maskGrid").appendChild(makeCell(c.gen, "UEG (Ours)", "ours"));
+  document.getElementById("maskGrid").appendChild(makeCell(c.overlay, "Predicted vs Condition Masks", "cond"));
+});
+document.getElementById("maskCount").textContent = `(${M.mask.length} cases)`;
+
+// Task 2 · Trajectory：生成 | 轨迹叠加 成对
+M.traj.forEach(c => {
+  document.getElementById("trajGrid").appendChild(makeCell(c.gen, "UEG (Ours)", "ours"));
+  document.getElementById("trajGrid").appendChild(makeCell(c.overlay, "Predicted vs Target Trajectories", "cond"));
+});
+document.getElementById("trajCount").textContent = `(${M.traj.length} cases)`;
+
+// Task 3 · EF：只有生成视频，label 显示 Target EF
+M.ef.forEach(s => {
+  const efVal = parseFloat(s.ef.replace("p", ".")).toFixed(1);
+  document.getElementById("efGrid").appendChild(makeCell(s.src, `Target EF ${efVal}%`, "ours"));
+});
+document.getElementById("efCount").textContent = `(${M.ef.length} cases)`;
+
+function openLightbox(src, caption) {
+  const lb = document.getElementById("lightbox");
+  const v = document.getElementById("lbVideo");
+  v.src = src;
+  document.getElementById("lbCaption").textContent = caption;
+  lb.classList.add("active");
+}
+function closeLightbox() {
+  const lb = document.getElementById("lightbox");
+  lb.classList.remove("active");
+  const v = document.getElementById("lbVideo");
+  v.pause(); v.removeAttribute("src"); v.load();
+}
+document.getElementById("lightbox").addEventListener("click", e => {
+  if (e.target.id === "lightbox") closeLightbox();
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeLightbox(); });
+</script>
+
+</body>
+</html>
