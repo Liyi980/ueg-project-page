@@ -187,20 +187,30 @@ const M = window.MANIFEST || { mask: [], traj: [], ef: [] };
 
 function makeVideo(src) {
   const v = document.createElement("video");
-  v.src = src;
   v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
   v.preload = "metadata"; // 先加载首帧，进入视口再播放，省流量
+
+  // 失败自动重试（最多 3 次，带缓存穿透参数），全部失败才显示占位
+  let attempts = 0;
   v.onerror = () => {
-    const d = document.createElement("div");
-    d.style.cssText = "width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;color:#9ca3af;background:#f3f4f6;font-size:.72rem;padding:8px;text-align:center";
-    d.textContent = "Missing: " + src.split("/").pop();
-    v.replaceWith(d);
+    attempts++;
+    if (attempts <= 3) {
+      setTimeout(() => { v.src = src + "?r=" + attempts; v.load(); }, 600 * attempts);
+    } else {
+      const d = document.createElement("div");
+      d.style.cssText = "width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;color:#9ca3af;background:#f3f4f6;font-size:.72rem;padding:8px;text-align:center";
+      d.textContent = "Missing: " + src.split("/").pop();
+      v.replaceWith(d);
+    }
   };
+
   // 进入视口才播放（一排 6 个视频同屏时不卡）
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => { e.isIntersecting ? v.play().catch(()=>{}) : v.pause(); });
   }, { threshold: 0.25 });
   io.observe(v);
+
+  v.src = src;
   return v;
 }
 
