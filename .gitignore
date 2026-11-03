@@ -2,7 +2,7 @@
 # 更新素材后重新部署前，可运行: python scripts/build_manifest.py
 
 # 备份目录（原始 mp4v 编码视频）
-assest/videos/_original_mp4v_backup/
+assest/videos/
 
 # 未被网页引用的视频
 assest/videos/mask/*/camus_condition_mask_overlay.mp4
