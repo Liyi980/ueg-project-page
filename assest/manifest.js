@@ -37,11 +37,6 @@ window.MANIFEST = {
    "overlay": "assest/videos/mask/patient0171/overlay_video_pred_condition_masks_patient0171.mp4"
   },
   {
-   "id": "patient0254",
-   "gen": "assest/videos/mask/patient0254/generated_video.mp4",
-   "overlay": "assest/videos/mask/patient0254/overlay_video_pred_condition_masks_patient0254.mp4"
-  },
-  {
    "id": "patient0273",
    "gen": "assest/videos/mask/patient0273/generated_video.mp4",
    "overlay": "assest/videos/mask/patient0273/overlay_video_pred_condition_masks_patient0273.mp4"
@@ -50,11 +45,6 @@ window.MANIFEST = {
    "id": "patient0290",
    "gen": "assest/videos/mask/patient0290/generated_video.mp4",
    "overlay": "assest/videos/mask/patient0290/overlay_video_pred_condition_masks_patient0290.mp4"
-  },
-  {
-   "id": "patient0314",
-   "gen": "assest/videos/mask/patient0314/generated_video.mp4",
-   "overlay": "assest/videos/mask/patient0314/overlay_video_pred_condition_masks_patient0314.mp4"
   },
   {
    "id": "patient0437",
@@ -73,11 +63,6 @@ window.MANIFEST = {
   }
  ],
  "traj": [
-  {
-   "id": "sim0066",
-   "gen": "assest/videos/traj/sim0066/sim0066_generated_video.mp4",
-   "overlay": "assest/videos/traj/sim0066/sim0066_overlay_predicted_vs_target.mp4"
-  },
   {
    "id": "sim0083",
    "gen": "assest/videos/traj/sim0083/sim0083_generated_video.mp4",
@@ -99,29 +84,9 @@ window.MANIFEST = {
    "overlay": "assest/videos/traj/sim0198/sim0198_overlay_predicted_vs_target.mp4"
   },
   {
-   "id": "sim0290",
-   "gen": "assest/videos/traj/sim0290/sim0290_generated_video.mp4",
-   "overlay": "assest/videos/traj/sim0290/sim0290_overlay_predicted_vs_target.mp4"
-  },
-  {
-   "id": "sim0307",
-   "gen": "assest/videos/traj/sim0307/sim0307_generated_video.mp4",
-   "overlay": "assest/videos/traj/sim0307/sim0307_overlay_predicted_vs_target.mp4"
-  },
-  {
    "id": "sim0347",
    "gen": "assest/videos/traj/sim0347/sim0347_generated_video.mp4",
    "overlay": "assest/videos/traj/sim0347/sim0347_overlay_predicted_vs_target.mp4"
-  },
-  {
-   "id": "sim0402",
-   "gen": "assest/videos/traj/sim0402/sim0402_generated_video.mp4",
-   "overlay": "assest/videos/traj/sim0402/sim0402_overlay_predicted_vs_target.mp4"
-  },
-  {
-   "id": "sim0422",
-   "gen": "assest/videos/traj/sim0422/sim0422_generated_video.mp4",
-   "overlay": "assest/videos/traj/sim0422/sim0422_overlay_predicted_vs_target.mp4"
   },
   {
    "id": "sim0462",
@@ -266,12 +231,6 @@ window.MANIFEST = {
    "ef": "57p124",
    "val": 57.124,
    "src": "assest/videos/ef/condition_0012_ef57p124/ef_ugd_ef57p124_sample_000_seed_42/generated_video_ef57p124.mp4"
-  },
-  {
-   "id": "0005",
-   "ef": "55p952",
-   "val": 55.952,
-   "src": "assest/videos/ef/condition_0005_ef55p952/ef_ugd_ef55p952_sample_000_seed_42/generated_video_ef55p952.mp4"
   },
   {
    "id": "0014",
