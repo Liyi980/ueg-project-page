@@ -99,11 +99,6 @@ window.MANIFEST = {
    "overlay": "assest/videos/traj/sim0585/sim0585_overlay_predicted_vs_target.mp4"
   },
   {
-   "id": "sim0639",
-   "gen": "assest/videos/traj/sim0639/sim0639_generated_video.mp4",
-   "overlay": "assest/videos/traj/sim0639/sim0639_overlay_predicted_vs_target.mp4"
-  },
-  {
    "id": "sim0666",
    "gen": "assest/videos/traj/sim0666/sim0666_generated_video.mp4",
    "overlay": "assest/videos/traj/sim0666/sim0666_overlay_predicted_vs_target.mp4"
